@@ -63,13 +63,14 @@ binary_tree_t *binary_trees_ancestor(
 		{
 			if (f->parent == s->parent)
 				return (f->parent);
-			while (f && s)
+			while (f->parent && s->parent)
 			{
 				if (f->parent == s->parent)
 					return (f);
 				f = f->parent;
 				s = s->parent;
 			}
+			return (f);
 		}
 	}
 
@@ -86,10 +87,10 @@ binary_tree_t *binary_trees_ancestor(
 			}
 			if (f == s)
 				return (f);
-			while (f && s)
+			while (f)
 			{
 				if (f->parent == s->parent)
-					return (f);
+					return (f->parent);
 				f = f->parent;
 				s = s->parent;
 			}
@@ -106,13 +107,14 @@ binary_tree_t *binary_trees_ancestor(
 			}
 			if (f == s)
 				return (f);
-			while (f && s)
+			while (s)
 			{
 				if (f->parent == s->parent)
-					return (f);
+					return (f->parent);
 				f = f->parent;
 				s = s->parent;
 			}
+			return (s);
 		}
 	}
 	return (NULL);
