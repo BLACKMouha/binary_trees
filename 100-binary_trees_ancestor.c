@@ -4,18 +4,17 @@
 /** ========== Prototypes ==========*/
 int sbinary_tree_depth(const binary_tree_t *tree);
 
+binary_tree_t *binary_tree_sibling(binary_tree_t *node);
+
 binary_tree_t *same_depth_ancestor(
 	const binary_tree_t *first,
 	const binary_tree_t *second);
 
-binary_tree_t *deeper_depths_ancestor(
+binary_tree_t *distinct_depths_ancestor(
 	const binary_tree_t *first,
 	const binary_tree_t *second);
 /* ====================================== */
 
-binary_tree_t *shallower_depths_ancestor(
-	const binary_tree_t *first,
-	const binary_tree_t *second);
 /**
  * sbinary_tree_depth - measures the depth of a node in a binary tree
  * Prototype: size_t binary_tree_depth(const binary_tree_t *tree);
@@ -76,9 +75,9 @@ binary_tree_t *binary_trees_ancestor(
 	else if (df > 0 && ds > 0 && df != ds)
 	{
 		if (df > ds)
-			return (deeper_depths_ancestor(f, s));
+			return (distinct_depths_ancestor(f, s));
 		if (df < ds)
-			return (shallower_depths_ancestor(f, s));
+			return (distinct_depths_ancestor(s, f));
 	}
 	return (NULL);
 }
@@ -130,10 +129,9 @@ binary_tree_t *same_depth_ancestor(
 }
 
 /**
- * deeper_depths_ancestor - finds the lowest common ancestor of two nodes where
- * the first is deeper
+ * distinct_depths_ancestor - finds the lowest common ancestor of two nodes
  *
- * Prototype: binary_tree_t *deeper_depths_ancestor(
+ * Prototype: binary_tree_t *distinct_depths_ancestor(
  *                              const binary_tree_t *deep,
  *                              const binary_tree_t *shalow);
  * @deep: pointer to the deepest node
@@ -141,7 +139,7 @@ binary_tree_t *same_depth_ancestor(
  * Return: a pointer to the lowest common ancestor node of the two given nodes
  * if it exists, otherwise NULL
  */
-binary_tree_t *deeper_depths_ancestor(
+binary_tree_t *distinct_depths_ancestor(
 	const binary_tree_t *deep,
 	const binary_tree_t *shallow)
 {
@@ -178,49 +176,21 @@ binary_tree_t *deeper_depths_ancestor(
 }
 
 /**
- * shallower_depths_ancestor - finds the lowest common ancestor of two nodes
- * where the first is shallower
- *
- * Prototype: binary_tree_t *shallower_depths_ancestor(
- *                              const binary_tree_t *deep,
- *                              const binary_tree_t *shalow);
- * @deep: pointer to the deepest node
- * @shallow: pointer to the shallowest node
- * Return: a pointer to the lowest common ancestor node of the two given nodes
- * if it exists, otherwise NULL
+ * binary_tree_sibling - finds the sibling of a node
+ * Prototype: binary_tree_t binary_tree_sibling(binary_tree_t *node);
+ * @node: pointer to the node to find the sibling
+ * Return: a pointer to the sibling if it exists, otherwise NULL
  */
-binary_tree_t *shallower_depths_ancestor(
-	const binary_tree_t *deep,
-	const binary_tree_t *shallow)
+binary_tree_t *binary_tree_sibling(binary_tree_t *node)
 {
-	int dd = sbinary_tree_depth(deep);
-	int ds = sbinary_tree_depth(shallow);
-	binary_tree_t *d, *s;
-
-	if (dd == -1 && ds == -1)
+	if (!node)
 		return (NULL);
-	d = (binary_tree_t *) deep;
-	s = (binary_tree_t *) shallow;
-
-	if (dd < ds)
-	{
-		while (dd != ds)
-		{
-			s = s->parent;
-			if (binary_tree_sibling(s) == d)
-				return (d->parent);
-			ds--;
-		}
-		if (d == s)
-			return (d);
-		while (s)
-		{
-			if (s->parent == d->parent)
-				return (s->parent);
-			d = d->parent;
-			s = s->parent;
-		}
-		return (s);
-	}
-	return (NULL);
+	if (!node->parent)
+		return (NULL);
+	if (node->parent->left == node)
+		return (node->parent->right);
+	else if (node->parent->right == node)
+		return (node->parent->left);
+	else
+		return (NULL);
 }
