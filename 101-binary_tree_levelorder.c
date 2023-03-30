@@ -39,7 +39,6 @@ void print_level_order(const binary_tree_t *tree, void (*func)(int))
 		print_current_level(tree, i, func);
 }
 
-
 /**
  * print_current_level - all nodes of a level from left to right
  * Prototype: void print_current_level(const binary_tree_t *tree,
